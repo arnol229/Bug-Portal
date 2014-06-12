@@ -1,0 +1,48 @@
+<DOCTYPE! html>
+<html>
+<head>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+	<title>
+		Landing
+	</title>
+</head>
+<body>
+<div id="message">
+{{ manager_ids }}
+</div>
+<div id="chart_div">
+	</div>
+<script>
+$(document).ready(function(){
+	var managers = ['kavenkat'];
+
+	function GetChartData(){
+		$.get("http://127.0.0.1:8000/bugs/dataview/", {managers: managers.join()})
+			.done(function(json_response){
+				drawChart(json_response)
+			});
+	}
+	GetChartData();
+
+});
+	</script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      //google.setOnLoadCallback(drawChart);
+      function drawChart(bugs) {
+        var data = google.visualization.arrayToDataTable(bugs);
+
+        var options = {
+          title: 'Company Performance',
+          hAxis: {title: 'Month', titleTextStyle: {color: 'red'}},
+          isStacked: true,
+        };
+
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+    </script>
+</body>
+</html>
